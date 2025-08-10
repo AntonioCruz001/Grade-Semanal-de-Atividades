@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Grade Semanal</title>
+    <style>
+        * {
+            margin: 0px;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            background-color: aquamarine;
+            gap: 2px;
+        }
+
+        .container {
+
+            height: 100vh;
+
+        }
+
+        .botao {
+            width: 100px;
+            height: 10vh;
+            background-color: brown;
+            text-align: center;
+        }
+
+        .lista {
+            width: 100px;
+            height: 10vh;
+            background-color: rgb(201, 111, 46);
+            text-align: center;
+        }
+
+        .lista .acao1 {
+            width: 100px;
+            height: 10vh;
+            background-color: rgb(188, 201, 46);
+            text-align: center;
+        }
+
+        .esquerda {
+            height: 100vh;
+            width: 50%;
+            background-color: coral;
+        }
+
+        .direita {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            height: 100vh;
+            width: 50%;
+            background-color: cornflowerblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="parts" hidden>
+        <div hidden class="final1">final1</div>
+    </div>
+    <div class="esquerda">
+        <div class="botao">Botao</div>
+    </div>
+
+    <div class="direita">
+        <div class="lista" hidden>
+            <div>Hidden?</div>
+            <div class="acao1">Ação 1</div>
+        </div>
+    </div>
+
+    <script>
+        let contador = 0
+        const botao = document.querySelector('.botao')
+        botao.addEventListener('click', () => {
+            //alert('Clicou')
+            contador = 1
+            const direita = document.querySelector('.direita')
+            const lista = document.querySelector('.lista')
+            lista.removeAttribute('hidden');
+            console.log(contador);
+
+        })
+
+        const acao1 = document.querySelector('.acao1')
+        acao1.addEventListener('click', () => {
+            contador = 0
+            const efeito = document.querySelector('.final1')
+            efeito.removeAttribute('hidden')
+            botao.appendChild(efeito)
+
+            console.log(contador);
+        })
+
+
+    </script>
+</body>
+
+</html>
