@@ -10,10 +10,20 @@
         }
 
         body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .titulo {
+            height: 50px;
+            text-align: center;
+        }
+
+        .agenda {
             display: grid;
             height: 100vh;
             grid-template-columns: repeat(8, 1fr);
-            grid-template-rows: repeat(16, 1fr);
+            grid-template-rows: repeat(16, 60px);
             /* justify-content: center; */
             background-color: aquamarine;
             gap: 2px;
@@ -31,27 +41,51 @@
         coluna 1 - nomes das horas 
         criar com função
     -->
+    <header class="titulo">
+        <h1>Agenda Semanal</h1>
+    </header>
 
+    <div class="agenda">
+
+    </div>
     <script>
         function criar() {
             const total = 128
             for (let index = 0; index < total; index++) {
-                const container = document.querySelector('body')
+                const container = document.querySelector('.agenda')
                 const div = document.createElement('div')
                 div.classList.add(`index-${index}`)
+                div.setAttribute('celula', 'ativa')
                 container.appendChild(div)
             }
         }
 
         function nomearHoras() {
             let contador = 7
-            for (let index = 120; index > 0; index -= 8) {
+            for (let index = 8; index <= 120; index += 8) {
                 const classe = `.index-${index}`
                 const classAtual = document.querySelector(classe)
-                // console.log(classAtual);
+                classAtual.setAttribute('celula', 'inativa')
+
                 classAtual.textContent = contador + ' h'
                 contador = contador + 1
             }
+
+            document.querySelector(`.index-0`).setAttribute('celula', 'inativa')
+        }
+
+        function nomearHorasInv() {
+            let contador = 7
+            for (let index = 120; index > 0; index -= 8) {
+                const classe = `.index-${index}`
+                const classAtual = document.querySelector(classe)
+                classAtual.setAttribute('celula', 'inativa')
+                
+                classAtual.textContent = contador + ' h'
+                contador = contador + 1
+            }
+
+            document.querySelector(`.index-0`).setAttribute('celula', 'inativa')
         }
 
         function nomearDias() {
@@ -62,18 +96,27 @@
 
                 const dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
                 classAtual.textContent = dias[contador]
+                classAtual.setAttribute('celula', 'inativa')
+
                 contador = contador + 1
             }
         }
 
         criar()
-        nomearHoras()
+        //nomearHoras()
+        nomearHorasInv()
         nomearDias()
 
-        // Criar Funcoes de botoes das atividades
+        // - É necessário inverter a página interira,
+        // ou seja, todas as linhas...
+        // - Criar Funcoes de botoes das atividades
         // abrir popup de opcoes
-        // nas opcoes, por a customizacao de atividades
-        // Ciar popup de instrucoes iniciais(Pt e En)
+        // - Nas opcoes, por a customizacao de atividades
+        // - Ciar popup de instrucoes iniciais(Pt e En)
+        // - Usar a hora do computador/celular p/ mover a tela para
+        // a hora certa
+        // - Permitir a rolagem da página
+        // - Permitir a inversão das horas (cima/baixo)
 
     </script>
 </body>
