@@ -14,7 +14,7 @@
             flex-direction: column;
         }
 
-        .titulo {
+        .cabecalho {
             height: 50px;
             text-align: center;
         }
@@ -41,8 +41,11 @@
         coluna 1 - nomes das horas 
         criar com função
     -->
-    <header class="titulo">
-        <h1>Agenda Semanal</h1>
+    <header class="cabecalho">
+        <!--Adicionar 3 divs flex com o titulo na div 2 para organizar com flex-grow
+            Criar os botoes de Config e Apagar, e mostrar a Hora atual
+        -->
+        <h1 class="titulo">Agenda Semanal</h1>
     </header>
 
     <div class="agenda">
@@ -80,7 +83,7 @@
                 const classe = `.index-${index}`
                 const classAtual = document.querySelector(classe)
                 classAtual.setAttribute('celula', 'inativa')
-                
+
                 classAtual.textContent = contador + ' h'
                 contador = contador + 1
             }
