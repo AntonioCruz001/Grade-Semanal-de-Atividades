@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Grade Semanal</title>
+    <style>
+        * {
+            margin: 0px;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cabecalho {
+            height: 50px;
+            text-align: center;
+        }
+
+        .agenda {
+            display: grid;
+            height: 100%;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(16, 60px);
+            /* justify-content: center; */
+            background-color: rgb(60, 95, 122);
+            gap: 2px;
+        }
+
+        div {
+            background-color: rgb(133, 95, 168);
+        }
+
+        .atividade {
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #b9dcdb;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        /* .conteudo {
+            padding: 7%;
+        } */
+    </style>
+</head>
+
+<body>
+    <!-- 8 x 16 cards = 128
+        linha 1 - nomes dos dias
+        coluna 1 - nomes das horas 
+        criar com função
+    -->
+    <header class="cabecalho">
+        <!--Adicionar 3 divs flex com o titulo na div 2 para organizar com flex-grow
+            Criar os botoes de Config e Apagar, e mostrar a Hora atual
+        -->
+        <h1 class="titulo">Agenda Semanal</h1>
+    </header>
+
+    <div class="agenda">
+
+    </div>
+
+
+
+
+    <script>
+        const div = document.querySelectorAll('div')
+        const atividades = JSON.parse(localStorage.getItem('atividades')) || [];
+
+        function criar() {
+            const total = 128
+            for (let index = 0; index < total; index++) {
+                const container = document.querySelector('.agenda')
+                const div = document.createElement('div')
+                // div.classList.add(`index-${index}`)
+                div.setAttribute('data-index', `${index}`)
+                div.classList.add(`atividade`)
+                div.setAttribute('celula', 'ativa')
+                container.appendChild(div)
+            }
+        }
+
+        function nomearHoras() {
+            let contador = 7
+            for (let index = 8; index <= 120; index += 8) {
+                // const classe = `.index-${index}`
+
+                const classAtual = document.querySelector(`[data-index="${index}"]`)
+                classAtual.setAttribute('celula', 'inativa')
+
+                classAtual.classList.add('horas')
+                classAtual.classList.remove(`atividade`)
+                classAtual.textContent = contador + ' h'
+                contador = contador + 1
+            }
+
+            document.querySelector(`.index-0`).setAttribute('celula', 'inativa').classList.remove(`atividade`)
+        }
+
+        function nomearHorasInv() {
+            let contador = 7
+            for (let index = 120; index > 0; index -= 8) {
+                // const classe = `.index-${index}`
+
+                const classAtual = document.querySelector(`[data-index="${index}"]`)
+                classAtual.setAttribute('celula', 'inativa')
+
+                classAtual.classList.add('horas')
+                classAtual.classList.remove(`atividade`)
+                classAtual.textContent = contador + ' h'
+                contador = contador + 1
+            }
+            const zero = document.querySelector('[data-index="0"]')
+            zero.setAttribute('celula', 'inativa')
+            zero.classList.remove(`atividade`)
+        }
+
+        function nomearDias() {
+            let contador = 0
+            for (let index = 1; index < 8; index++) {
+                // const classe = `.index-${index}`
+                const classAtual = document.querySelector(`[data-index="${index}"]`)
+
+                const dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
+                classAtual.textContent = dias[contador]
+
+                classAtual.classList.add('dias')
+                classAtual.setAttribute('celula', 'inativa')
+
+                classAtual.classList.remove(`atividade`)
+                contador = contador + 1
+            }
+        }
+
+        criar()
+        //nomearHoras()
+        nomearHorasInv()
+        nomearDias()
+
+        const horaDisponivel = document.querySelectorAll('.atividade')
+
+        horaDisponivel.forEach(element => {
+            element.addEventListener('click', () => {
+                if (element.getAttribute('celula') == 'ativa') {
+                    const input = prompt('Atividade')
+                    if (input) {
+                        const divNova = document.createElement('div')
+                        divNova.classList.add('conteudo')
+                        const indexAtual = element.getAttribute('data-index')
+                        const celula = document.querySelector(`[data-index="${indexAtual}"]`)
+                        console.log(celula);
+
+                        celula.appendChild(divNova)
+
+                        divNova.textContent = input
+
+                        // Entender como utilizar variaveis em objetos
+                        // const obj = {'indexAtual':input}
+                        // atividades.push(obj) 
+                        console.log('Ativa');
+                    }
+                }
+            })
+        });
+
+
+
+        // - É necessário inverter a página interira,
+        // ou seja, todas as linhas...
+        // - Criar Funcoes de botoes das atividades
+        // abrir popup de opcoes
+        // - Nas opcoes, por a customizacao de atividades
+        // - Ciar popup de instrucoes iniciais(Pt e En)
+        // - Usar a hora do computador/celular p/ mover a tela para
+        // a hora certa
+        // - Permitir a rolagem da página
+        // - Permitir a inversão das horas (cima/baixo)
+
+    </script>
+</body>
+
+</html>
