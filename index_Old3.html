@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Grade Semanal</title>
+    <style>
+        * {
+            margin: 0px;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cabecalho {
+            display: flex;
+            height: 50px;
+            text-align: center;
+        }
+
+        .cabecalho div {
+            flex-grow: 1;
+        }
+
+        .cabecalho h1 {
+            flex-grow: 3;
+        }
+
+        /* .agenda-semanal {
+            display: grid;
+            height: 100%;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(16, 60px);
+            justify-content: center;
+            background-color: rgb(60, 95, 122);
+            gap: 2px;
+        } */
+
+        .agenda-semanal {
+            display: grid;
+            grid-template-columns: 1fr 9fr;
+            grid-template-rows: 1fr 2fr;
+        }
+
+        div {
+            background-color: rgb(133, 95, 168);
+        }
+
+        .atividades-container {
+            display: grid;
+        }
+
+        .atividade {
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #b9dcdb;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        /* .conteudo {
+            padding: 7%;
+        } */
+    </style>
+</head>
+
+<body>
+    <!-- 8 x 16 cards = 128
+        linha 1 - nomes dos dias
+        coluna 1 - nomes das horas 
+        criar com função
+    -->
+    <header class="cabecalho">
+        <!--Adicionar 3 divs flex com o titulo na div 2 para organizar com flex-grow
+            Criar os botoes de Config e Apagar, e mostrar a Hora atual
+        -->
+        <div>Horário Atual</div>
+        <h1 class="titulo">Agenda Semanal</h1>
+        <div>Configurações</div>
+    </header>
+
+    <div class="agenda-semanal">
+        <!-- <div class="container-1">
+        </div> -->
+
+        <div class="config">Placeholder</div>
+        <div class="dias-container"></div>
+
+        <!-- <div class="container-2">
+        </div> -->
+
+        <div class="horas-container"></div>
+        <div class="atividades-container"></div>
+    </div>
+
+
+
+    <script>
+        const dias = document.querySelector('.dias-container')
+        const horas = document.querySelector('.horas-container')
+        const atividades = document.querySelector('.atividades-container')
+
+        function criarHorasDesc() {
+            // const inicio = prompt('Que horas inicia seu dia?')
+            // const horaInicio =  parseInt(prompt('Que horas inicia seu dia?'))
+            const horaInicio = 7;
+
+            for (let i = 14; i >= 0; i--) {
+                const div = document.createElement('div')
+                div.classList.add('horas')
+
+                div.id = `index-${horaInicio + i}`
+
+                horas.appendChild(div)
+                div.textContent = `${horaInicio + i} h`
+            }
+        }
+
+        function criarDias() {
+            for (let i = 0; i < 8; i++) {
+                const div = document.createElement('div')
+                div.classList.add('dias')
+                div.id = `index-${i}`
+                dias.appendChild(div)
+
+                const diasNomes = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
+                div.textContent = diasNomes[i]
+            }
+        }
+
+        criarHorasDesc()
+        criarDias()
+
+    </script>
+</body>
+
+</html>
