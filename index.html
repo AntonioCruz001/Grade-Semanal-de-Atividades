@@ -7,19 +7,28 @@
     <style>
         * {
             margin: 0px;
+            --grid-width: 1214.57px;
+            --largDivHora: 48.1px;
         }
 
         body {
             display: flex;
             flex-direction: column;
+            height: 100vh;
+            overflow-y: hidden;
+        }
+
+        .header-container {
+            background-color: #71a8d9;
         }
 
         .cabecalho {
             display: flex;
-            height: 50px;
+            /* height: 80px; */
             /* margin-left: 20px; */
-            background-color: #71a8d9;
+            /* background-color: #71a8d9; */
             text-align: center;
+            padding: 10px;
         }
 
         .cabecalho div {
@@ -30,37 +39,115 @@
             flex-grow: 3;
         }
 
+        .paginas {
+            display: flex;
+            padding: 10px;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .pages {
+            background-color: #9cc2e3;
+            padding: 5px 10px;
+            border-radius: 5px;
+            /* Para impedir selecao seleção selection */
+            user-select: none;
+        }
+
+        .pages:hover {
+            background-color: #cce3f7;
+            cursor: pointer;
+        }
+
+        /* .pages:active {
+            background-color: #e3ffc9;
+            cursor: pointer;
+        } */
+
+        [data-active] {
+            background-color: #dbfaf8 !important;
+        }
+
+        .linha3 {
+            display: flex;
+        }
+
+        .filter {
+            width: var(--largDivHora);
+            text-align: center;
+            background-color: #e7eff5ee;
+            user-select: none;
+        }
+
+        .filter:hover {
+            cursor: pointer;
+        }
+
+        .dias-da-semana {
+            display: flex;
+            /* justify-content: center; */
+            position: relative;
+            /* left: 48.1px; */
+            width: var(--grid-width);
+        }
+
+        .dias {
+            width: calc(var(--grid-width)/7);
+            text-align: center;
+            background-color: #6a524463;
+            color: antiquewhite;
+            border-right: solid 2px aquamarine;
+        }
+
         .semana {
             display: flex;
             flex-direction: row;
             width: 100%;
+            overflow-y: scroll;
         }
 
         .barra {
-            /* position: fixed; */
-            top: 50px;
-            left: 0;
-            /* height: 100vh; */
-            height: calc(50px * 16);
-            width: 50px;
             box-sizing: border-box;
+            /* position: fixed; */
+            /* top: 50px;
+            left: 0; */
+            /* height: 100vh; */
+            /* height: calc(50px * 16); */
+            height: calc(80px * 16);
+            /* height: 100vh; */
+            width: 50px;
             /* overflow-y: auto; */
 
             background-color: brown;
         }
 
-        .barra div {
+        .horas {
             box-sizing: border-box;
-            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
             border-top: solid 2px rgb(165, 138, 42);
             border-right: solid 2px rgb(165, 138, 42);
         }
 
+        .barra div div {
+            background-color: rgba(8, 188, 158, 0.87);
+        }
+
+        .grid-container {
+            width: 100%;
+            /* para o grid abaixo funcionar normalmente */
+
+            height: 100vh;
+            /* overflow-y: scroll; */
+        }
+
         .grid {
-            flex-grow: 1;
+            /* flex-grow: 1; */
             display: grid;
             /* margin-left: 50px; */
-            height: calc(50px * 16);
+            height: calc(80px * 16);
             width: 100%;
             grid-template-columns: repeat(7, 1fr);
             grid-template-rows: repeat(16, 1fr);
@@ -74,7 +161,15 @@
             border-top: solid 2px brown;
             border-right: solid 2px brown;
         }
-        
+
+        /* .popup {
+            position: absolute;
+            top: 50vh;
+            left: 50vw;
+            
+            padding: 30px;
+            background-color: aqua;
+        } */
     </style>
 </head>
 
@@ -84,36 +179,232 @@
         coluna 1 - nomes das horas 
         criar com função
     -->
-    <header class="cabecalho">
-        <div>Horário Atual</div>
-        <h1 class="titulo">Agenda Semanal</h1>
-        <div>Configurações</div>
-    </header>
 
-    <div class="semana">
-        <div class="barra">
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
+    <div class="header-container">
+        <header class="cabecalho">
+            <div>Horário Atual</div>
+            <h1 class="titulo">Agenda Semanal</h1>
+            <div>Configurações</div>
+        </header>
+        <div class="paginas">
+            <div class="pages" page="1" data-active>1</div>
+            <div class="pages" page="2">2</div>
+            <div class="pages" page="3">3</div>
+            <div class="pages" page="4">4</div>
+            <div class="pages" page="5">5</div>
         </div>
-
-        <div class="grid">
-
+        <div class="linha3">
+            <div class="filter" data-direction="Down">V</div>
+            <div class="dias-da-semana">
+                <div class="dias">Seg</div>
+                <div class="dias">Ter</div>
+                <div class="dias">Qua</div>
+                <div class="dias">Qui</div>
+                <div class="dias">Sex</div>
+                <div class="dias">Sab</div>
+                <div class="dias">Dom</div>
+            </div>
         </div>
     </div>
 
-    <script>
-        const grid = document.querySelector('.grid')
+    <div class="semana">
+        <div class="barra">
 
-        function criarDivs() {
-            for (i = 112; i > 0; i--) {
+        </div>
+
+        <div class="grid-container">
+            <div class="grid">
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Criar 5 localStorages ou 5 objs vazios
+        const storage = JSON.parse(localStorage.getItem('storagePaginas')) || []
+        const todasAsPaginas = [{ page: 1 }, { page: 2 }, { page: 3 }, { page: 4 }, { page: 5 }]
+        // todasAsPaginas[0]['chave'] = 'valor'
+        console.log(todasAsPaginas);
+
+
+        const grid = document.querySelector('.grid')
+        const barra = document.querySelector('.barra')
+        const aZ = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y', 'Z']
+        const linhasQuant = 16
+        const colunasQuant = 7
+        const horaAcordar = 7
+        const horaDormir = 22
+
+        const activePage = document.querySelector('[data-active]')
+
+
+        function criarBarraDeHoras() {
+            let horaAcordarContador = horaAcordar
+
+            for (i = 0; i < linhasQuant; i++) {
                 const div = document.createElement('div')
-                div.setAttribute('data-linha', `${i}`)
-                grid.appendChild(div)
+                const divInterna = document.createElement('div')
+                div.classList.add('horas')
+                div.setAttribute('data-linha', `${aZ[i]}`)
+                div.setAttribute('data-card', `H${aZ[i]}`)
+
+                divInterna.textContent = `${horaAcordarContador} h`
+                horaAcordarContador++
+
+                div.appendChild(divInterna)
+                barra.appendChild(div)
             }
         }
 
-        criarDivs()
+        function criarDivs() {
+            // Funcao que cria Linhas A-Z e cards de 1-7
+            for (i = 0; i < linhasQuant; i++) {
+                for (j = 0; j < colunasQuant; j++) {
+                    const div = document.createElement('div')
+                    div.classList.add('atividade')
+                    div.setAttribute('data-linha', `${aZ[i]}`)
+                    div.setAttribute('data-card', `${aZ[i] + (j + 1)}`)
+                    grid.appendChild(div)
+                }
+            }
+        }
+
+        // INVERTIDOS
+        function criarBarraDeHorasInv() {
+            let horaDormirContador = horaDormir
+
+            for (i = linhasQuant -1; i >= 0; i--) {
+                const div = document.createElement('div')
+                const divInterna = document.createElement('div')
+
+                div.classList.add('horas')
+                div.setAttribute('data-linha', `${aZ[i]}`)
+                div.setAttribute('data-card', `H${aZ[i]}`)
+
+                divInterna.textContent = `${horaDormirContador} h`
+                horaDormirContador--
+
+                div.appendChild(divInterna)
+                barra.appendChild(div)
+            }
+        }
+
+        function criarDivsInv() {
+            // Funcao que cria Linhas A-Z e cards de 1-7
+            for (i = linhasQuant -1; i >= 0; i--) {
+                for (j = 0; j < colunasQuant; j++) {
+                    const div = document.createElement('div')
+                    div.classList.add('atividade')
+                    div.setAttribute('data-linha', `${aZ[i]}`)
+                    div.setAttribute('data-card', `${aZ[i] + (j + 1)}`)
+                    grid.appendChild(div)
+                }
+            }
+        }
+
+
+
+       
+
+        const pageButtons = document.querySelectorAll('.pages')
+        pageButtons.forEach(page => {
+            page.addEventListener('click', () => {
+                const ativo = page.hasAttribute('data-active')
+                console.log(ativo);
+
+                if (page.hasAttribute('data-active')) {
+                    console.log('page ativa');
+                } else if (!page.hasAttribute('data-active')) {
+                    const pageAtiva = document.querySelector('[data-active]')
+                    pageAtiva.removeAttribute('data-active')
+                    page.setAttribute('data-active', "")
+                }
+            })
+        })
+
+
+
+        // Funcionalidade de clicar nos cards ...
+        // e gerar as opcoes em uma div(popup)
+
+        // function criarPopUp() {
+        //     const popup = document.createElement('div')
+        //     const inputPopUp = document.createElement('input')
+        //     popup.classList.add('popup')
+        //     inputPopUp.id = 'inputPopUp'
+        //     popup.appendChild(inputPopUp)
+        //     document.body.appendChild(popup)
+
+        // }
+        // criarPopUp()
+
+        const filterArray = JSON.parse(localStorage.getItem('filterHoras'));
+        const filterButton = document.querySelector('.filter')
+
+        if(filterArray=='Down'){
+            filterButton.setAttribute('data-direction','Down')
+            filterButton.textContent = "V"
+            criarBarraDeHoras()
+            criarDivs()
+        }else if (filterArray=='Up'){
+            filterButton.setAttribute('data-direction','Up')
+            filterButton.textContent = "A"
+            criarBarraDeHorasInv()
+            criarDivsInv()
+        }
+        
+        filterButton.addEventListener('click', () => {
+            if (filterButton.getAttribute('data-direction')=='Down') {
+                filterButton.textContent = 'A'
+                filterButton.setAttribute('data-direction','Up')
+
+                //localStorage.setItem('listaDeCards', JSON.stringify(listaDeCards));
+                localStorage.setItem('filterHoras',JSON.stringify(filterButton.getAttribute('data-direction')))
+
+                document.querySelector('.barra').innerHTML = ""
+                document.querySelector('.grid').innerHTML = ""
+                criarBarraDeHorasInv()
+                criarDivsInv()
+                // testarInversao()
+            }else if (filterButton.getAttribute('data-direction')=="Up"){
+                filterButton.textContent = 'V'
+                filterButton.setAttribute('data-direction','Down')
+
+                localStorage.setItem('filterHoras',JSON.stringify(filterButton.getAttribute('data-direction')))
+                
+                document.querySelector('.barra').innerHTML = ""
+                document.querySelector('.grid').innerHTML = ""
+                criarBarraDeHoras()
+                criarDivs()
+                // testarInversao()
+            }
+        })
+        
+        // if(filterButton.getAttribute('data-direction')=="Down"){
+        //     criarBarraDeHoras()
+        //     criarDivs()
+        // }else if (filterButton.getAttribute('data-direction')=="Up"){
+        //     criarBarraDeHorasInv()
+        //     criarDivsInv()
+        // }
+
+        // Funciona
+        // Organizar os dias com essa ferramenta
+
+        // const divHora = document.querySelector('[data-card="HA"]')
+        // const largDivHora = window.getComputedStyle(divHora)
+        // console.log(largDivHora.width);
+        
+        // criarBarraDeHorasInv()
+        // criarDivsInv()
+        function testarInversao() {
+            const celula = document.querySelector('[data-card="E3"]')
+            celula.textContent = "E.P.O. Livro 10%"
+
+            const celula2 = document.querySelector('[data-card="A2"]')
+            celula2.textContent = "COD3R Bootstrap"
+        }
+        //testarInversao()
 
     </script>
 </body>
