@@ -240,8 +240,8 @@
     <script>
         // Criar 5 localStorages ou 5 objs vazios
         const storageNomes = ['storagePaginas', 'filterHoras']
-        const todasAsPaginas = [{ page: 1 }, { page: 2 }, { page: 3 }, { page: 4 }, { page: 5 }]
         const storage = JSON.parse(localStorage.getItem('storagePaginas')) || []
+        const todasAsPaginas = [{ page: 1 }, { page: 2 }, { page: 3 }, { page: 4 }, { page: 5 }]
         // localStorage.setItem(storageNomes[0], JSON.stringify(todasAsPaginas))
         // todasAsPaginas[0]['chave'] = 'valor'
         // console.log(todasAsPaginas);
@@ -492,7 +492,7 @@
 
                     const pageNum = activePage.getAttribute('page') - 1
 
-                    let arrayFromStorage = storage
+                    const arrayFromStorage = storage
 
                     // Salvar os dados nos objs das paginas do array
                     // So depois salvar no LocalStorage

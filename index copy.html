@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Grade Semanal</title>
+    <style>
+        * {
+            margin: 0px;
+            --grid-width: 1214.57px;
+            --largDivHora: 48.1px;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow-y: hidden;
+        }
+
+        .header-container {
+            background-color: #71a8d9;
+        }
+
+        .cabecalho {
+            display: flex;
+            /* height: 80px; */
+            /* margin-left: 20px; */
+            /* background-color: #71a8d9; */
+            text-align: center;
+            padding: 10px;
+        }
+
+        .cabecalho div {
+            flex-grow: 1;
+        }
+
+        .cabecalho h1 {
+            flex-grow: 3;
+        }
+
+        .paginas {
+            display: flex;
+            padding: 10px;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .pages {
+            background-color: #9cc2e3;
+            padding: 5px 10px;
+            border-radius: 5px;
+            /* Para impedir selecao seleção selection */
+            user-select: none;
+        }
+
+        .pages:hover {
+            background-color: #cce3f7;
+            cursor: pointer;
+        }
+
+        /* .pages:active {
+            background-color: #e3ffc9;
+            cursor: pointer;
+        } */
+
+        [data-page-active] {
+            background-color: #dbfaf8 !important;
+        }
+
+        .linha3 {
+            display: flex;
+        }
+
+        .filter {
+            width: var(--largDivHora);
+            text-align: center;
+            background-color: #e7eff5ee;
+            user-select: none;
+        }
+
+        .filter:hover {
+            cursor: pointer;
+        }
+
+        .dias-da-semana {
+            display: flex;
+            /* justify-content: center; */
+            position: relative;
+            /* left: 48.1px; */
+            width: var(--grid-width);
+        }
+
+        .dias {
+            width: calc(var(--grid-width)/7);
+            text-align: center;
+            background-color: #6a524463;
+            color: antiquewhite;
+            border-right: solid 2px aquamarine;
+        }
+
+        .semana {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            overflow-y: scroll;
+        }
+
+        .barra {
+            box-sizing: border-box;
+            /* position: fixed; */
+            /* top: 50px;
+            left: 0; */
+            /* height: 100vh; */
+            /* height: calc(50px * 16); */
+            height: calc(80px * 16);
+            /* height: 100vh; */
+            width: 50px;
+            /* overflow-y: auto; */
+
+            background-color: brown;
+        }
+
+        .horas {
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+            border-top: solid 2px rgb(165, 138, 42);
+            border-right: solid 2px rgb(165, 138, 42);
+        }
+
+        .barra div div {
+            background-color: rgba(8, 188, 158, 0.87);
+        }
+
+        .grid-container {
+            width: 100%;
+            /* para o grid abaixo funcionar normalmente */
+
+            height: 100vh;
+            /* overflow-y: scroll; */
+        }
+
+        .grid {
+            /* flex-grow: 1; */
+            display: grid;
+            /* margin-left: 50px; */
+            height: calc(80px * 16);
+            width: 100%;
+            grid-template-columns: repeat(7, 1fr);
+            grid-template-rows: repeat(16, 1fr);
+
+        }
+
+        .atividade {
+            box-sizing: border-box;
+            /* height: 50px; */
+            /* width: 100px; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top: solid 2px brown;
+            border-right: solid 2px brown;
+        }
+
+        .atividade-conteudo {
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+
+        /* Aprender sobre animacao e Fade Out */
+        [data-atividade-ativa] {
+            background-color: #59ecb8;
+            transition: background-color .5s;
+        }
+
+        .fade-bg {
+            background-color: transparent !important;
+            transition: background-color .5s;
+        }
+
+        /* .popup {
+            position: absolute;
+            top: 50vh;
+            left: 50vw;
+            
+            padding: 30px;
+            background-color: aqua;
+        } */
+    </style>
+</head>
+
+<body>
+    <!-- 8 x 16 cards = 128
+        linha 1 - nomes dos dias
+        coluna 1 - nomes das horas 
+        criar com função
+    -->
+
+    <div class="header-container">
+        <header class="cabecalho">
+            <div>Horário Atual</div>
+            <h1 class="titulo">Agenda Semanal</h1>
+            <div>Configurações</div>
+        </header>
+        <div class="paginas">
+            <div class="pages" page="1" data-page-active>1</div>
+            <div class="pages" page="2">2</div>
+            <div class="pages" page="3">3</div>
+            <div class="pages" page="4">4</div>
+            <div class="pages" page="5">5</div>
+        </div>
+        <div class="linha3">
+            <div class="filter" data-direction="Down">V</div>
+            <div class="dias-da-semana">
+                <div class="dias">Seg</div>
+                <div class="dias">Ter</div>
+                <div class="dias">Qua</div>
+                <div class="dias">Qui</div>
+                <div class="dias">Sex</div>
+                <div class="dias">Sab</div>
+                <div class="dias">Dom</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="semana">
+        <div class="barra">
+
+        </div>
+
+        <div class="grid-container">
+            <div class="grid">
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // constantes globais
+        const storageNomes = ['storagePaginas', 'filterHoras']
+        const todasAsPaginas = [{ page: 1 }, { page: 2 }, { page: 3 }, { page: 4 }, { page: 5 }]
+        const storage = JSON.parse(localStorage.getItem('storagePaginas')) || todasAsPaginas
+    </script>
+</body>
+
+</html>
