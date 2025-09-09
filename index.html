@@ -555,7 +555,7 @@
 
             const card = div.getAttribute('data-card')
 
-            if (storage && [pageNum - 1][card]) {
+            if (storage && storage[pageNum - 1][card]) {
                 const novaDiv = document.createElement('div')
                 novaDiv.classList.add('atividade-conteudo')
                 novaDiv.textContent = storage[pageNum - 1][card]

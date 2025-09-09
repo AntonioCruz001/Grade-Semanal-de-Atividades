@@ -242,6 +242,273 @@
         const storageNomes = ['storagePaginas', 'filterHoras']
         const todasAsPaginas = [{ page: 1 }, { page: 2 }, { page: 3 }, { page: 4 }, { page: 5 }]
         const storage = JSON.parse(localStorage.getItem('storagePaginas')) || todasAsPaginas
+
+        const grid = document.querySelector('.grid')
+        const barra = document.querySelector('.barra')
+
+        const aZ = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y', 'Z']
+        const linhasQuant = 16
+        const colunasQuant = 7
+        const horaAcordar = 7
+        const horaDormir = 22
+
+        // Funcao para recuperar os dados
+        // do LocalStorage a partir de
+        // criarDivs;
+        // Tambem a partir da pagina atual;
+        function recuDataLocalStorage(div) {
+            const storage = JSON.parse(localStorage.getItem('storagePaginas'))
+            const pageAtual = document.querySelector('[data-page-active]')
+            const pageNum = pageAtual.getAttribute('page')
+
+            const card = div.getAttribute('data-card')
+
+            if (storage && storage[pageNum - 1] && storage[pageNum - 1][card]) {
+                const novaDiv = document.createElement('div')
+                novaDiv.classList.add('atividade-conteudo')
+                novaDiv.textContent = storage[pageNum - 1][card]
+                div.appendChild(novaDiv)
+            }
+        }
+
+        // Menor para o maior
+        function criarBarraDeHoras() {
+            let horaAcordarContador = horaAcordar
+
+            for (i = 0; i < linhasQuant; i++) {
+                const div = document.createElement('div')
+                const divInterna = document.createElement('div')
+                div.classList.add('horas')
+                div.setAttribute('data-linha', `${aZ[i]}`)
+                div.setAttribute('data-card', `H${aZ[i]}`)
+
+                divInterna.textContent = `${horaAcordarContador} h`
+                horaAcordarContador++
+
+                div.appendChild(divInterna)
+                barra.appendChild(div)
+            }
+        }
+
+        function criarDivs() {
+            // Funcao que cria Linhas A-Z e cards de 1-7
+            for (i = 0; i < linhasQuant; i++) {
+                for (j = 0; j < colunasQuant; j++) {
+                    const div = document.createElement('div')
+                    div.classList.add('atividade')
+                    div.setAttribute('data-linha', `${aZ[i]}`)
+                    div.setAttribute('data-card', `${aZ[i] + (j + 1)}`)
+                    grid.appendChild(div)
+                    // Recuperar Dados se houver
+                    recuDataLocalStorage(div)
+                }
+            }
+        }
+
+        // INVERTIDOS
+        function criarBarraDeHorasInv() {
+            let horaDormirContador = horaDormir
+
+            for (i = linhasQuant - 1; i >= 0; i--) {
+                const div = document.createElement('div')
+                const divInterna = document.createElement('div')
+
+                div.classList.add('horas')
+                div.setAttribute('data-linha', `${aZ[i]}`)
+                div.setAttribute('data-card', `H${aZ[i]}`)
+
+                divInterna.textContent = `${horaDormirContador} h`
+                horaDormirContador--
+
+                div.appendChild(divInterna)
+                barra.appendChild(div)
+            }
+        }
+
+        function criarDivsInv() {
+            // Funcao que cria Linhas A-Z e cards de 1-7
+            for (i = linhasQuant - 1; i >= 0; i--) {
+                for (j = 0; j < colunasQuant; j++) {
+                    const div = document.createElement('div')
+                    div.classList.add('atividade')
+                    div.setAttribute('data-linha', `${aZ[i]}`)
+                    div.setAttribute('data-card', `${aZ[i] + (j + 1)}`)
+                    grid.appendChild(div)
+                    // Recuperar Dados se houver
+                    recuDataLocalStorage(div)
+                }
+            }
+        }
+
+        // Funcao de resetar barra e grid
+        function resetarDivs() {
+            document.querySelector('.barra').innerHTML = ""
+            document.querySelector('.grid').innerHTML = ""
+        }
+
+        // Funcao de adicionar Listeners nas divs(.atividade)
+        function adicionarListenersAtividade() {
+            const atividade = document.querySelectorAll('.atividade')
+            atividade.forEach(element => {
+                element.addEventListener('click', () => {
+                    const contemAtiva = document.querySelector('[data-atividade-ativa]')
+
+                    // FADE-BG
+                    if (contemAtiva) {
+                        contemAtiva.removeAttribute('data-atividade-ativa');
+                        // A classe 'fade-bg' tem transition de 0.1s
+                        contemAtiva.classList.add('fade-bg');
+                        // O setTimeout irá remover a classe após o efeito de fadeout
+                        setTimeout(() => {
+                            contemAtiva.classList.remove('fade-bg');
+                        }, 1000);
+                    }
+
+                    // Adicionar o fadein na div ativa
+                    element.setAttribute('data-atividade-ativa', "")
+                    // Verificar se a div possui filhos
+                    console.log(element.hasChildNodes());
+
+                    // Input
+                    let conteudo = prompt("Atividade")
+
+                    // Apagar o conteudo anterior se houver
+                    if (element.hasChildNodes() && conteudo) {
+                        element.innerHTML = ""
+                    } else if (element.hasChildNodes() && !conteudo) {
+                        conteudo = element.firstChild.textContent
+                        // apagar para nao duplicar
+                        element.innerHTML = ""
+                    }
+
+                    // Criar a div interna do conteúdo
+                    const div = document.createElement('div')
+                    div.classList.add('atividade-conteudo')
+
+                    // Parte para substituir por dados do localStorage
+
+                    const dataCard = element.getAttribute('data-card')
+                    const activePage = document.querySelector('[data-page-active]')
+                    const pageNum = activePage.getAttribute('page') - 1
+                    const storage = JSON.parse(localStorage.getItem('storagePaginas'))
+                    let arrayFromStorage = storage
+
+                    // Objeto com chave/valor --- [dataCard] = conteudo 
+                    // usar colchetes para acessar o valor da var 
+
+                    // Adicionando o dataCard na page do storage
+                    arrayFromStorage[pageNum][dataCard] = conteudo
+                    localStorage.setItem(storageNomes[0], JSON.stringify(arrayFromStorage))
+
+                    div.textContent = arrayFromStorage[pageNum][dataCard]
+                    console.log('Conteudo??', arrayFromStorage[pageNum][dataCard]);
+
+
+                    if (conteudo) {
+                        element.appendChild(div);
+                        // Fade out automático após 1s
+                        setTimeout(() => {
+                            element.removeAttribute('data-atividade-ativa');
+                            element.classList.add('fade-bg');// Adiciona o fadeout
+                            setTimeout(() => {
+                                element.classList.remove('fade-bg');
+                            }, 500);
+                        }, 700);
+                    } else {
+                        setTimeout(() => {
+                            element.removeAttribute('data-atividade-ativa');
+                            element.classList.add('fade-bg');// Adiciona o fadeout
+                            setTimeout(() => {
+                                element.classList.remove('fade-bg');
+                            }, 500);
+                        }, 700);
+                    }
+                })
+            })
+        }
+
+        //Setar o localStorage do filter
+        function setFilterDirectionStorage() {
+            const filter = document.querySelector(".filter")
+            const fDirection = filter.getAttribute('[data-direction]')
+            localStorage.setItem(`${storageNomes[1]}`, JSON.stringify(fDirection))
+        }
+
+        // Funcao de direcao vertical da página;
+        // Recupera filter do storage para o reload da página;
+        // Cria as Primeiras Divs;
+        // E adiciona Event Listeners;
+        function recupFilterDoStorage() {
+            const filterArray = JSON.parse(localStorage.getItem('filterHoras'));
+            const filterButton = document.querySelector('.filter')
+            if (filterArray == 'Down') {
+                filterButton.setAttribute('data-direction', 'Down')
+                filterButton.textContent = "V"
+                criarBarraDeHoras()
+                criarDivs()
+                adicionarListenersAtividade()
+            } else if (filterArray == 'Up') {
+                filterButton.setAttribute('data-direction', 'Up')
+                filterButton.textContent = "A"
+                criarBarraDeHorasInv()
+                criarDivsInv()
+                adicionarListenersAtividade()
+            }
+        }
+
+        recupFilterDoStorage()
+
+        // click do filter
+
+        const filterButton = document.querySelector('.filter')
+        filterButton.addEventListener('click', () => {
+            if (filterButton.getAttribute('data-direction') == 'Down') {
+                filterButton.textContent = 'A'
+                filterButton.setAttribute('data-direction', 'Up')
+
+                localStorage.setItem('filterHoras', JSON.stringify(filterButton.getAttribute('data-direction')))
+
+                resetarDivs()
+                criarBarraDeHorasInv()
+                criarDivsInv()
+                adicionarListenersAtividade()
+
+            } else if (filterButton.getAttribute('data-direction') == "Up") {
+                filterButton.textContent = 'V'
+                filterButton.setAttribute('data-direction', 'Down')
+
+                localStorage.setItem('filterHoras', JSON.stringify(filterButton.getAttribute('data-direction')))
+
+                resetarDivs()
+                criarBarraDeHoras()
+                criarDivs()
+                adicionarListenersAtividade()
+            }
+        })
+
+        // PAGES
+        const pageButtons = document.querySelectorAll('.pages')
+        pageButtons.forEach(page => {
+            page.addEventListener('click', () => {
+                const ativo = page.hasAttribute('data-page-active')
+                console.log(ativo);
+
+                if (page.hasAttribute('data-page-active')) {
+                    resetarDivs()
+                    recupFilterDoStorage()
+                    console.log('page ativa');
+                } else if (!page.hasAttribute('data-page-active')) {
+                    const pageAtiva = document.querySelector('[data-page-active]')
+                    pageAtiva.removeAttribute('data-page-active')
+                    page.setAttribute('data-page-active', "")
+                    resetarDivs()
+                    recupFilterDoStorage()
+                }
+            })
+        })
+
+        // Cada click nas pages deve reescrever a grid
+        // Assim como o filter
     </script>
 </body>
 
