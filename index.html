@@ -257,7 +257,7 @@
         // criarDivs;
         // Tambem a partir da pagina atual;
         function recuDataLocalStorage(div) {
-            const storage = JSON.parse(localStorage.getItem('storagePaginas'))
+            const storage = JSON.parse(localStorage.getItem('storagePaginas')) || todasAsPaginas
             const pageAtual = document.querySelector('[data-page-active]')
             const pageNum = pageAtual.getAttribute('page')
 
@@ -390,7 +390,7 @@
                     const dataCard = element.getAttribute('data-card')
                     const activePage = document.querySelector('[data-page-active]')
                     const pageNum = activePage.getAttribute('page') - 1
-                    const storage = JSON.parse(localStorage.getItem('storagePaginas'))
+                    const storage = JSON.parse(localStorage.getItem('storagePaginas')) || todasAsPaginas
                     let arrayFromStorage = storage
 
                     // Objeto com chave/valor --- [dataCard] = conteudo 
