@@ -9,6 +9,7 @@
             margin: 0px;
             --grid-width: 1214.57px;
             --largDivHora: 48.1px;
+            --altura-header-container: 124.667px;
         }
 
         body {
@@ -423,8 +424,12 @@
             const popupWidth = container.offsetWidth;
             const popupHeight = container.offsetHeight;
 
+            const popupRect = document.querySelector('.configPopup-container')
+
+            const headerContainer = document.querySelector('.header-container')
+            const headerRect = headerContainer.getBoundingClientRect()
             // posicão do popup - IFs
-            
+
             // Posição do popup a direita da div
             let left = rect.right + window.scrollX;
             let top = rect.top + window.scrollY;
@@ -433,8 +438,14 @@
             if (rect.right + popupWidth > window.innerWidth) {
                 left = rect.left - popupWidth + window.scrollX;
             }
-            // checar embaixo
-            if (rect.top + popupHeight > window.innerHeight) {
+            // checa se a div clicada está saindo da tela
+            // pra baixo
+            if (rect.bottom > window.innerHeight) {
+                top = rect.bottom - popupHeight - rect.height + window.scrollY;
+            }
+            // checa se a div está dentro da tela
+            // e se o popup está fora da tela
+            if (rect.bottom < window.innerHeight && rect.top + popupHeight > window.innerHeight) {
                 top = rect.bottom - popupHeight + window.scrollY;
             }
 
@@ -442,6 +453,11 @@
             if (top < 0) {
                 top = 124.667 + 'px';
             }
+            // checa se a div está saido para cima(entrando no header)
+            if (rect.top < headerRect.bottom){
+                top = rect.bottom + window.scrollY;
+            }
+            console.log(headerRect.bottom);
             
             container.style.left = left + 'px';
             container.style.top = top + 'px';
@@ -494,6 +510,13 @@
                 filterButton.textContent = "A"
                 criarBarraDeHorasInv()
                 criarDivsInv()
+                adicionarListenersAtividade()
+            } else {
+                // CASO PADRÃO: primeira vez ou localStorage limpo
+                filterButton.setAttribute('data-direction', 'Down')
+                filterButton.textContent = "V"
+                criarBarraDeHoras()
+                criarDivs()
                 adicionarListenersAtividade()
             }
         }
