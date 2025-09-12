@@ -18,6 +18,12 @@
             overflow-y: hidden;
         }
 
+        .no-scroll {
+            overflow: hidden;
+            height: 100vh;
+        }
+
+
         .header-container {
             background-color: #71a8d9;
         }
@@ -180,6 +186,26 @@
             transition: background-color .5s;
         }
 
+        .configPopup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: auto;
+            background-color: #0080004a;
+        }
+
+        .configPopup-container {
+            position: absolute;
+            z-index: 9999;
+            display: flex;
+            background-color: #59ecb8;
+
+            width: calc(var(--largura-atividade) + var(--largura-atividade) + var(--largura-atividade));
+            height: calc(var(--altura-atividade) + var(--altura-atividade) + var(--altura-atividade));
+        }
+
         /* .popup {
             position: absolute;
             top: 50vh;
@@ -187,6 +213,12 @@
             
             padding: 30px;
             background-color: aqua;
+        } */
+
+        /* .configPopup-container {
+            position: fixed;
+            top: 200px;
+            left: 200px;
         } */
     </style>
 </head>
@@ -348,6 +380,77 @@
             document.querySelector('.grid').innerHTML = ""
         }
 
+        // Config Atividades
+        // Deve gerar o popup de config e suas funcoes
+        // Tirar cor da div após a config (fade-bg)
+        function configAtividades(element) {
+
+            // Variáveis
+            const containerOverlay = document.createElement('div')
+            containerOverlay.classList.add('configPopup-overlay')
+
+            const container = document.createElement('div')
+            container.classList.add('configPopup-container')
+
+            const widthElemento = element.offsetWidth
+            document.documentElement.style.setProperty('--largura-atividade', widthElemento + 'px')
+            const heightElemento = element.offsetHeight
+            document.documentElement.style.setProperty('--altura-atividade', heightElemento + 'px')
+
+            const label = document.createElement('label')
+            label.setAttribute('for', 'nomeAtividade')
+            label.textContent = 'Nome da Atividade'
+
+            const input = document.createElement('input')
+            input.setAttribute('type', 'text')
+            input.setAttribute('maxlength', '10')
+            input.setAttribute('id', 'nomeAtividade')
+
+            const rect = element.getBoundingClientRect()
+            console.log(rect);
+
+            // AppendChilds
+            containerOverlay.appendChild(container)
+            container.appendChild(label)
+            container.appendChild(input)
+
+            containerOverlay.style.display = 'none'
+            document.body.appendChild(containerOverlay)
+
+            containerOverlay.style.display = 'block';
+            container.style.visibility = 'hidden';
+
+            const popupWidth = container.offsetWidth;
+            const popupHeight = container.offsetHeight;
+
+            // posicão do popup - IFs
+            
+            // Posição do popup a direita da div
+            let left = rect.right + window.scrollX;
+            let top = rect.top + window.scrollY;
+
+            // checar à direita
+            if (rect.right + popupWidth > window.innerWidth) {
+                left = rect.left - popupWidth + window.scrollX;
+            }
+            // checar embaixo
+            if (rect.top + popupHeight > window.innerHeight) {
+                top = rect.bottom - popupHeight + window.scrollY;
+            }
+
+            // Se não couber para cima, fixa no topo
+            if (top < 0) {
+                top = 124.667 + 'px';
+            }
+            
+            container.style.left = left + 'px';
+            container.style.top = top + 'px';
+            containerOverlay.style.display = 'block';
+            container.style.visibility = 'visible';
+
+            console.log("Log: POPUP 'configAtividades'");
+        }
+
         // Funcao de adicionar Listeners nas divs(.atividade)
         function adicionarListenersAtividade() {
             const atividade = document.querySelectorAll('.atividade')
@@ -358,73 +461,10 @@
                     // FADE-BG
                     if (contemAtiva) {
                         contemAtiva.removeAttribute('data-atividade-ativa');
-                        // A classe 'fade-bg' tem transition de 0.1s
-                        contemAtiva.classList.add('fade-bg');
-                        // O setTimeout irá remover a classe após o efeito de fadeout
-                        setTimeout(() => {
-                            contemAtiva.classList.remove('fade-bg');
-                        }, 1000);
                     }
-
-                    // Adicionar o fadein na div ativa
                     element.setAttribute('data-atividade-ativa', "")
-                    // Verificar se a div possui filhos
-                    console.log(element.hasChildNodes());
 
-                    // Input
-                    let conteudo = prompt("Atividade")
-
-                    // Apagar o conteudo anterior se houver
-                    if (element.hasChildNodes() && conteudo) {
-                        element.innerHTML = ""
-                    } else if (element.hasChildNodes() && !conteudo) {
-                        conteudo = element.firstChild.textContent
-                        // apagar para nao duplicar
-                        element.innerHTML = ""
-                    }
-
-                    // Criar a div interna do conteúdo
-                    const div = document.createElement('div')
-                    div.classList.add('atividade-conteudo')
-
-                    // Parte para substituir por dados do localStorage
-
-                    const dataCard = element.getAttribute('data-card')
-                    const activePage = document.querySelector('[data-page-active]')
-                    const pageNum = activePage.getAttribute('page') - 1
-                    const storage = JSON.parse(localStorage.getItem('storagePaginas')) || todasAsPaginas
-                    let arrayFromStorage = storage
-
-                    // Objeto com chave/valor --- [dataCard] = conteudo 
-                    // usar colchetes para acessar o valor da var 
-
-                    // Adicionando o dataCard na page do storage
-                    arrayFromStorage[pageNum][dataCard] = conteudo
-                    localStorage.setItem(storageNomes[0], JSON.stringify(arrayFromStorage))
-
-                    div.textContent = arrayFromStorage[pageNum][dataCard]
-                    console.log('Conteudo??', arrayFromStorage[pageNum][dataCard]);
-
-
-                    if (conteudo) {
-                        element.appendChild(div);
-                        // Fade out automático após 1s
-                        setTimeout(() => {
-                            element.removeAttribute('data-atividade-ativa');
-                            element.classList.add('fade-bg');// Adiciona o fadeout
-                            setTimeout(() => {
-                                element.classList.remove('fade-bg');
-                            }, 500);
-                        }, 700);
-                    } else {
-                        setTimeout(() => {
-                            element.removeAttribute('data-atividade-ativa');
-                            element.classList.add('fade-bg');// Adiciona o fadeout
-                            setTimeout(() => {
-                                element.classList.remove('fade-bg');
-                            }, 500);
-                        }, 700);
-                    }
+                    configAtividades(element)
                 })
             })
         }
@@ -514,18 +554,18 @@
         const apagar = document.querySelector('.apagar')
         apagar.addEventListener('click', () => {
             const storage = JSON.parse(localStorage.getItem(storageNomes[0]))
-            
+
             if (storage) {
                 const pergunta = confirm('Apagar?')
                 if (pergunta) {
                     //const atividade = document.querySelectorAll('.atividade')
                     const conteudo = document.querySelectorAll('.atividade-conteudo')
-                    conteudo.forEach(conteudoInterno =>{
+                    conteudo.forEach(conteudoInterno => {
                         conteudoInterno.innerHTML = ""
                     })
                     localStorage.removeItem(storageNomes[0])
                 }
-            }else{
+            } else {
                 alert('Nada para apagar!')
             }
         })
